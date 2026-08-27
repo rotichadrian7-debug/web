@@ -1,81 +1,198 @@
-export interface ServiceItem {
+export type TreatmentCategory = 'all' | 'injectables' | 'laser' | 'facials' | 'body' | 'anti-aging';
+
+export interface Treatment {
   id: string;
-  title: string;
-  category: string;
-  description: string;
-  fullDetails: string;
-  deliverables: string[];
-  techStack: string[];
-  typicalROI: string;
-  iconName: string;
-  architectureDiagram: string[];
-}
-
-export interface ProjectItem {
-  id: string;
-  title: string;
-  category: string;
-  tagline: string;
-  screenshot: string;
-  problem: string;
-  solution: string;
-  techStack: string[];
-  businessResults: {
-    metric: string;
-    label: string;
-  }[];
-  liveDemoType?: 'lead_qualifier' | 'voice_agent' | 'crm_dashboard' | 'proposal_gen';
-  githubUrl?: string;
-  caseStudyUrl?: string;
-}
-
-export interface ProcessStep {
-  stepNumber: number;
-  title: string;
-  duration: string;
-  summary: string;
-  details: string[];
-  deliverables: string[];
-  icon: string;
-}
-
-export interface TechItem {
   name: string;
-  category: 'AI Models' | 'Automation & CRM' | 'Frontend & Database' | 'Voice & Communications';
-  description: string;
-  proficiency: string;
-  icon: string;
+  category: 'injectables' | 'laser' | 'facials' | 'body' | 'anti-aging';
+  subtitle: string;
+  shortDesc: string;
+  fullDesc: string;
+  priceStartingAt: number;
+  duration: string;
+  downtime: string;
+  longevity?: string;
+  resultsDuration?: string;
+  recommendedSessions?: string;
+  targetConcerns: string[];
+  benefits: string[];
+  clinicalProtocol?: string;
+  suitableFor?: string;
+  doctorId?: string;
+  doctorName?: string;
+  doctorTitle?: string;
+  image: string;
+  isPopular?: boolean;
   featured?: boolean;
 }
 
-export interface TestimonialItem {
+export type ProductCategory = 
+  | 'all' 
+  | 'serums' 
+  | 'creams' 
+  | 'cleansers' 
+  | 'retinoids' 
+  | 'spf' 
+  | 'masks-peels' 
+  | 'bundles' 
+  | 'post-procedure';
+
+export interface ProductActiveIngredient {
+  name: string;
+  percentage?: string;
+  purpose: string;
+}
+
+export interface Product {
   id: string;
-  clientName: string;
-  role: string;
-  company: string;
-  avatar: string;
+  name: string;
+  subtitle?: string;
+  line: string;
+  category: ProductCategory;
+  price: number;
+  originalPrice?: number;
   rating: number;
-  quote: string;
-  metricsAchieved: string;
-  isDemo: boolean;
+  reviewsCount: number;
+  volume: string;
+  shortDesc: string;
+  fullDesc: string;
+  activeIngredients: ProductActiveIngredient[];
+  keyBenefits: string[];
+  howToUse: string;
+  clinicalResults?: string[];
+  ingredientsList?: string;
+  skinTypes: string[];
+  targetConcerns: string[];
+  inStock: boolean;
+  stockCount: number;
+  badge?: string;
+  image: string;
+  secondaryImage?: string;
+  isBestseller?: boolean;
+  isNew?: boolean;
 }
 
-export interface ChatMessage {
+export interface CartItem {
+  product: Product;
+  quantity: number;
+  selectedSize?: string;
+}
+
+export interface Doctor {
   id: string;
-  sender: 'user' | 'assistant';
-  text: string;
-  timestamp: string;
+  name: string;
+  title: string;
+  credentials: string;
+  experienceYears: number;
+  specialties: string[];
+  specializations?: string[];
+  bio: string;
+  education?: string;
+  image: string;
+  rating: number;
+  reviewsCount: number;
+  locations: string[];
+  clinicLocations?: string[];
+  proceduresCount: string;
 }
 
-export interface ProposalAuditResult {
-  companyName: string;
-  recommendedSystem: string;
-  estimatedRevenueUpside: string;
-  leadScoreSpeed: string;
-  automationModules: string[];
-  implementationTime: string;
-  roiMultiplier: string;
-  executiveSummary: string;
+export interface BeforeAfterCase {
+  id: string;
+  title: string;
+  treatmentName: string;
+  category: string;
+  patientAge: string;
+  timeline: string;
+  concerns: string[];
+  doctorName: string;
+  beforeImage: string;
+  afterImage: string;
+  description: string;
+  treatmentsUsed: string[];
 }
 
+export interface Review {
+  id: string;
+  name: string;
+  author?: string;
+  rating: number;
+  isVerified?: boolean;
+  verified?: boolean;
+  treatment: string;
+  type?: 'Treatment' | 'Skincare Product';
+  subject?: string;
+  comment: string;
+  date: string;
+  location: string;
+  avatar?: string;
+}
 
+export interface ClinicLocation {
+  id: string;
+  name: string;
+  city: string;
+  address: string;
+  phone: string;
+  hours: string;
+  features?: string;
+}
+
+export interface MembershipTier {
+  id: string;
+  name: string;
+  subtitle: string;
+  pricePerMonth: number;
+  perks: string[];
+  isHighlighted?: boolean;
+}
+
+export interface BookingAppointment {
+  id: string;
+  treatmentId: string;
+  treatmentName: string;
+  doctorId: string;
+  doctorName: string;
+  location: string;
+  date: string;
+  timeSlot: string;
+  patientName: string;
+  patientEmail: string;
+  patientPhone: string;
+  concernsNote: string;
+  depositPaid: number;
+  status: 'CONFIRMED' | 'PENDING';
+  bookingCode: string;
+  prepInstructions?: string[];
+}
+
+export interface SkinQuizAnswers {
+  primaryGoal: string;
+  skinType: string;
+  sensitivity: string;
+  ageGroup: string;
+  mainConcerns: string[];
+  routinePreference: string;
+}
+
+export interface OrderDetails {
+  orderId: string;
+  items: CartItem[];
+  subtotal: number;
+  discount: number;
+  shipping: number;
+  tax: number;
+  total: number;
+  customerName: string;
+  email: string;
+  shippingAddress: {
+    address: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+  };
+  shippingMethod: string;
+  paymentMethod: string;
+  date: string;
+  trackingNumber: string;
+  selectedSamples: string[];
+}
