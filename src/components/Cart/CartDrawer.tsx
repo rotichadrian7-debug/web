@@ -249,7 +249,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       >
                         <div className="truncate pr-2">
                           <span className="font-semibold block truncate text-slate-200">{sample.name}</span>
-                          <span className="text-[10px] text-slate-500 font-mono">{sample.volume}</span>
+                          <span className="text-[10px] text-slate-500 font-mono">{sample.desc}</span>
                         </div>
                         <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
                           isSelected ? 'bg-[#C5A880] border-[#C5A880] text-black' : 'border-white/20'

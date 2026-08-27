@@ -276,7 +276,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                       />
                       <div>
                         <div className="text-xs font-bold text-white group-hover:text-[#E4D5BE] transition-colors">{d.name}</div>
-                        <div className="text-[11px] text-slate-400">{d.title} • {d.clinicLocation}</div>
+                        <div className="text-[11px] text-slate-400">{d.title} • {d.locations?.join(' / ') || d.clinicLocations?.join(' / ')}</div>
                       </div>
                     </div>
                     <span className="px-3 py-1 rounded-lg bg-[#C5A880]/20 text-[#E4D5BE] text-[10px] font-bold">

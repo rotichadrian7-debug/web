@@ -46,60 +46,121 @@ app.get("/api/health", (_req, res) => {
 // 2. Gemini AI Virtual Aesthetic Concierge / Skincare Specialist Chat
 app.post("/api/gemini/skin-consultant", async (req, res) => {
   try {
-    const { messages, userMessage, skinProfile } = req.body;
+    const { messages, userMessage, skinProfile, activeContext } = req.body;
     const ai = getGenAI();
 
     if (!ai) {
       // Elegant fallback response
       const fallbackResponses = [
-        "Welcome to ÉLAN Medical Aesthetics. For radiant skin with minimal downtime, our signature combination is the Hydrafacial MD® Deluxe paired with our C-Radiance 15% Ferulic Serum in the morning and Mineral Silk SPF 50+. How may I tailor your aesthetic journey today?",
-        "Our board-certified dermatologists recommend introducing our Micro-Encapsulated 0.75% Retinoid 2-3 nights per week to gently remodel collagen without peeling. Would you like assistance booking an in-clinic consultation or selecting the ideal medical-grade regimen for your skin type?",
-        "For treating stubborn hyperpigmentation and melasma, we typically prescribe our Halo™ Hybrid Fractional Laser in-clinic, followed by the daily Post-Procedure Recovery Balm and C-Radiance 15% serum. Would you like to check doctor availability in Beverly Hills, Manhattan, or London?"
+        {
+          reply: "Welcome to ÉLAN Medical Aesthetics. For luminous, firm skin with minimal downtime, our gold-standard clinical combination is the **Hydrafacial MD® Deluxe Platinum** paired with our daily **C-Radiance 15% Pure L-Ascorbic + Ferulic Elixir** and **Mineral Silk SPF 50+**.\n\nWould you like me to guide you through our clinical treatment protocols or help tailor an at-home medical skincare routine?",
+          suggestedActions: [
+            { label: "Book Hydrafacial MD®", type: "treatment", targetId: "hydrafacial-md-deluxe" },
+            { label: "View C-Radiance Serum", type: "product", targetId: "elan-c-radiance-ferulic-serum" },
+            { label: "Take 60-Sec Skin Diagnostic", type: "quiz" }
+          ]
+        },
+        {
+          reply: "Our board-certified dermatologists recommend introducing our **Micro-Encapsulated 0.75% Retinoid + Bakuchiol** 2–3 evenings weekly. Because it uses lipid encapsulation, it accelerates cellular renewal without the flaking or barrier disruption of traditional tretinoin.\n\nFor deeper skin tightening and jawline definition, pairing this with **Morpheus8 RF Microneedling** delivers exceptional structural remodeling.",
+          suggestedActions: [
+            { label: "Book Morpheus8 RF", type: "treatment", targetId: "morpheus8-rf-microneedling" },
+            { label: "Explore Retinoid Elixir", type: "product", targetId: "elan-retinoid-bakuchiol-elixir" },
+            { label: "Consult Dr. Elena Vance", type: "book", targetId: "morpheus8-rf-microneedling", doctorId: "dr-elena-vance" }
+          ]
+        },
+        {
+          reply: "For stubborn hyperpigmentation and melasma, we utilize the dual-action **Halo™ Hybrid Fractional Laser** in our clinic suites, followed by our **Cosmelan® Depigmentation Protocol** and **Post-Laser Soothing Recovery Balm** to protect vulnerable melanocytes.",
+          suggestedActions: [
+            { label: "Book Halo™ Laser Session", type: "treatment", targetId: "halo-hybrid-fractional-laser" },
+            { label: "View Post-Laser Recovery Balm", type: "product", targetId: "elan-post-laser-recovery-balm" },
+            { label: "Take Skin Diagnostic Quiz", type: "quiz" }
+          ]
+        }
       ];
       const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-      return res.json({
-        reply: randomResponse,
-        suggestedActions: ["Book In-Clinic Consultation", "Explore Glass Skin Set", "View Before & After Cases"]
-      });
+      return res.json(randomResponse);
     }
 
-    const systemInstruction = `You are Dr. Elena Vance's Senior Aesthetic & Skincare Concierge at ÉLAN Medical Aesthetics (luxury clinic locations in Beverly Hills, Manhattan Upper East Side, and London Mayfair).
-ÉLAN provides high-end cosmetic dermatology treatments and an online medical-grade skincare boutique:
-- In-Clinic Treatments: Botox® & Dysport® Neuromodulators, Architectural Lip & Cheek Fillers, Morpheus8 RF Microneedling, Halo™ Hybrid Fractional Laser, Hydrafacial MD® Deluxe Platinum, Sculptra® Collagen Biostimulator, CoolSculpting® Elite, Cosmelan® Depigmentation Peel.
-- Medical Skincare Boutique Products:
-  1. C-Radiance 15% Pure L-Ascorbic + Ferulic Elixir ($148)
-  2. Phyto-Peptide Cellular Lift & Barrier Cream ($165)
-  3. Micro-Encapsulated 0.75% Retinoid + Bakuchiol ($135)
-  4. Mineral Silk Tinted Glow Defense SPF 50+ ($68)
-  5. Pure Cleansing Botanical Amino Milk ($58)
-  6. Medical Post-Laser & Peel Soothing Recovery Balm ($110)
-  7. The Ultimate Glass Skin Radiance Protocol Set ($360 - Save $79)
-  8. The Complete Post-Procedure Laser Recovery Box ($245)
+    const systemInstruction = `You are Dr. Elena Vance's Lead Aesthetic Dermatologist & Virtual Concierge at ÉLAN Medical Aesthetics (with luxury clinic flagships in Beverly Hills Wilshire Blvd, Manhattan Madison Ave, and London Mayfair).
 
-Your Tone & Persona:
-- Ultra-refined, warm, empathetic, physician-informed, and luxurious (like a premier aesthetic dermatology director).
-- Provide expert guidance on skin concerns (wrinkles, hyperpigmentation, melasma, acne scars, jowl laxity, lip volume, barrier repair).
-- Mention ingredient science (L-ascorbic acid, copper peptides, non-nano zinc oxide, micro-cannula technique).
-- Offer to help them book an appointment or add physician-curated products to their boutique cart.
-- Keep responses concise, elegant, and well-spaced (2-3 paragraphs max).`;
+ÉLAN CLINICAL CATALOG & FORMULARY:
+Treatments:
+- "botox-dysport-neuromodulator": Precision Neuromodulators (Botox & Dysport) - for expression lines, masseter slimming, forehead, crow's feet ($450+, zero downtime).
+- "bespoke-lip-architecture-filler": Architectural Lip Rejuvenation & Dermal Fillers - golden ratio micro-cannula hyaluronic acid ($850+, 24-48h mild swelling).
+- "morpheus8-rf-microneedling": Morpheus8 Subdermal RF Remodeling - 4mm deep collagen induction, jawline sharpening, acne scars ($1,100+, 2-3 days pinkness).
+- "halo-hybrid-fractional-laser": Halo™ Hybrid Fractional Laser - resolves sun damage, melasma, enlarged pores ($1,450+, 3-5 days bronzing).
+- "hydrafacial-md-deluxe": Hydrafacial MD® Deluxe Platinum - vortex exfoliation, lymphatic drainage, exosome infusion ($350+, zero downtime).
+- "sculptra-biostimulator": Sculptra Aesthetic Biostimulator - poly-L-lactic acid for gradual natural collagen volume ($950/vial).
+- "coolsculpting-elite": CoolSculpting® Elite Dual Contouring - non-surgical fat freezing ($1,600+).
+- "cosmelan-medical-depigmentation": Cosmelan® Medical Depigmentation Protocol - intensive medical mask for stubborn melasma ($1,200+).
+
+Medical Skincare Boutique Products:
+- "elan-c-radiance-ferulic-serum": C-Radiance 15% Pure L-Ascorbic + Ferulic Elixir ($148)
+- "elan-phyto-peptide-barrier-cream": Phyto-Peptide Cellular Lift & Barrier Cream ($165)
+- "elan-retinoid-bakuchiol-elixir": Micro-Encapsulated 0.75% Retinoid + Bakuchiol ($135)
+- "elan-mineral-silk-glow-spf50": Mineral Silk Tinted Glow Defense SPF 50+ ($68)
+- "elan-pure-cleansing-amino-milk": Pure Cleansing Botanical Amino Milk ($58)
+- "elan-post-laser-recovery-balm": Medical Post-Laser & Peel Soothing Recovery Balm ($110)
+- "elan-glass-skin-protocol-bundle": The Ultimate Glass Skin Radiance Protocol Set ($360)
+- "elan-laser-recovery-kit": The Complete Post-Procedure Laser Recovery Box ($245)
+
+Physicians & Specialists:
+- "dr-elena-vance": Dr. Elena Vance, MD (Medical Director, Harvard/Johns Hopkins)
+- "dr-marcus-sterling": Dr. Marcus Sterling, MD, FACS (Facial Plastic Surgeon, Yale/Stanford)
+- "sarah-lin-rn": Sarah Lin, RN, CANS (Master Injector, Allergan National Trainer)
+- "chloe-dupres-le": Chloe Duprès, LE, CLT (Laser Technologies Director)
+
+YOUR RESPONSE STYLE & INSTRUCTIONS:
+1. Provide elegant, physician-informed guidance. Use clear, luxurious language with scientific explanations (e.g. lipid barrier recovery, collagen synthesis, epidermal turnover, hyaluronic hydration).
+2. Answer the client's questions directly, including downtimes, treatment preparation, ingredient compatibility, and expected results.
+3. Suggest 1 to 3 relevant action items matching our exact treatment IDs or product IDs.
+
+Format your output as a JSON object with:
+- "reply": Markdown formatted string with your refined consultation text (2-3 concise paragraphs, use bolding for emphasis).
+- "suggestedActions": Array of objects, each containing:
+  - "label": Short button text (e.g. "Book Morpheus8 Consultation", "View C-Radiance Serum", "Take Skin Quiz")
+  - "type": One of "treatment", "product", "book", "quiz"
+  - "targetId": The exact ID of the treatment or product if applicable (e.g. "morpheus8-rf-microneedling" or "elan-c-radiance-ferulic-serum")
+  - "doctorId": Optional doctor ID if recommending a specific doctor (e.g. "dr-elena-vance")`;
 
     const formattedMessages = Array.isArray(messages) 
       ? messages.map((m: any) => `${m.role.toUpperCase()}: ${m.content}`).join("\n") 
       : "";
     
-    const prompt = `Client Skin Profile Context: ${JSON.stringify(skinProfile || {})}\n\nChat History:\n${formattedMessages}\n\nCLIENT INQUIRY: ${userMessage || "Hello"}`;
+    const prompt = `Client Skin Profile Context: ${JSON.stringify(skinProfile || {})}
+Active Page Context: ${JSON.stringify(activeContext || {})}
+Previous Chat History:
+${formattedMessages}
+
+CLIENT QUESTION: ${userMessage || "Hello"}`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.7-flash",
       contents: prompt,
       config: {
         systemInstruction,
+        responseMimeType: "application/json",
         temperature: 0.7,
       },
     });
 
-    const reply = response.text || "Welcome to ÉLAN Medical Aesthetics. How may our clinical specialists assist your skin transformation today?";
-    res.json({ reply });
+    let jsonResult: any = {};
+    try {
+      jsonResult = JSON.parse(response.text || "{}");
+    } catch {
+      jsonResult = {
+        reply: response.text || "Welcome to ÉLAN Medical Aesthetics. How may our clinical specialists assist your skin transformation today?",
+        suggestedActions: [
+          { label: "Book Consultation", type: "book" },
+          { label: "Explore Skincare Boutique", type: "product", targetId: "elan-c-radiance-ferulic-serum" }
+        ]
+      };
+    }
+
+    res.json({
+      reply: jsonResult.reply || "Welcome to ÉLAN Medical Aesthetics. How may I assist your aesthetic journey today?",
+      suggestedActions: jsonResult.suggestedActions || []
+    });
   } catch (error: any) {
     console.error("Error in /api/gemini/skin-consultant:", error);
     res.status(500).json({ error: "Failed to generate aesthetic consultation", details: error.message });
@@ -154,7 +215,7 @@ Return JSON with the following keys:
 - Regimen Preference: ${routinePreference}`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.7-flash",
       contents: prompt,
       config: {
         systemInstruction,

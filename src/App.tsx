@@ -451,6 +451,9 @@ export default function App() {
       <AIConsultantWidget
         onOpenBooking={handleOpenBooking}
         onOpenQuiz={handleOpenQuiz}
+        onSelectProduct={handleOpenProduct}
+        onSelectTreatment={handleOpenTreatment}
+        onAddToCart={handleAddToCart}
       />
 
     </div>
