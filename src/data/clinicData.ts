@@ -148,23 +148,6 @@ export const DOCTORS: Doctor[] = [
     proceduresCount: "8,500+"
   },
   {
-    id: "sarah-lin-rn",
-    name: "Sarah Lin, RN, BSN, CANS",
-    title: "Master Aesthetic Nurse Specialist & Key Opinion Leader",
-    credentials: "Certified Aesthetic Nurse Specialist • Allergan National Trainer",
-    experienceYears: 11,
-    specialties: ["Russian Lip Architecture", "Under-Eye Tear Trough Restoration", "Sculptra Full Body Biostimulation"],
-    specializations: ["Russian Lip Architecture", "Under-Eye Tear Trough Restoration", "Sculptra Full Body Biostimulation"],
-    bio: "Sarah is celebrated for her ultra-gentle micro-cannula technique that minimizes bruising and achieves undetectable, photogenic enhancement.",
-    education: "BSN, UCLA School of Nursing; Advanced Injectable Fellowship, London",
-    image: "https://images.unsplash.com/photo-1594824813576-2f0cb490a078?auto=format&fit=crop&w=600&q=80",
-    rating: 4.97,
-    reviewsCount: 512,
-    locations: ["Beverly Hills, CA", "Manhattan, NY"],
-    clinicLocations: ["Beverly Hills, CA", "Manhattan, NY"],
-    proceduresCount: "14,000+"
-  },
-  {
     id: "chloe-dupres-le",
     name: "Chloe Duprès, LE, CLT",
     title: "Lead Medical Aesthetician & Laser Technologies Director",

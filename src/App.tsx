@@ -19,7 +19,6 @@ import { BookingModal } from './components/Modals/BookingModal';
 import { TreatmentDetailModal } from './components/Modals/TreatmentDetailModal';
 import { ProductDetailModal } from './components/Modals/ProductDetailModal';
 import { SearchModal } from './components/Modals/SearchModal';
-import { AIConsultantWidget } from './components/AIAssistant/AIConsultantWidget';
 
 // Types & Data
 import { CartItem, Product, Treatment, OrderDetails, BookingAppointment } from './types';
@@ -445,15 +444,6 @@ export default function App() {
         onSelectTreatment={handleOpenTreatment}
         onSelectProduct={handleOpenProduct}
         onOpenBooking={handleOpenBooking}
-      />
-
-      {/* Floating AI Aesthetic Concierge Widget */}
-      <AIConsultantWidget
-        onOpenBooking={handleOpenBooking}
-        onOpenQuiz={handleOpenQuiz}
-        onSelectProduct={handleOpenProduct}
-        onSelectTreatment={handleOpenTreatment}
-        onAddToCart={handleAddToCart}
       />
 
     </div>

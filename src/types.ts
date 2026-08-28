@@ -162,6 +162,9 @@ export interface BookingAppointment {
   status: 'CONFIRMED' | 'PENDING';
   bookingCode: string;
   prepInstructions?: string[];
+  emailNotificationSent?: boolean;
+  recipientEmail?: string;
+  adminNotificationSent?: boolean;
 }
 
 export interface SkinQuizAnswers {

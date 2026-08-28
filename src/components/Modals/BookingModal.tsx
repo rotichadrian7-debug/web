@@ -12,7 +12,9 @@ import {
   ArrowLeft,
   FileText,
   AlertCircle,
-  RotateCcw
+  RotateCcw,
+  Mail,
+  Send
 } from 'lucide-react';
 import { TREATMENTS, DOCTORS, CLINIC_INFO } from '../../data/clinicData';
 import { BookingAppointment } from '../../types';
@@ -452,10 +454,23 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 </p>
               </div>
 
+              {/* Email Delivery Confirmation Card */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-[#1A1F2C] to-[#141721] border border-[#C5A880]/40 text-left space-y-2 text-xs">
+                <div className="flex items-center gap-2.5 text-[#E4D5BE] font-bold">
+                  <div className="w-6 h-6 rounded-full bg-[#C5A880]/20 flex items-center justify-center text-[#C5A880]">
+                    <Mail className="w-3.5 h-3.5" />
+                  </div>
+                  <span>Confirmation Email Sent Successfully</span>
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  A full consultation summary, pre-procedure protocol, and calendar invite have been delivered to <strong className="text-white">{completedBooking.patientEmail}</strong>. Our clinical coordinator has also received your appointment file.
+                </p>
+              </div>
+
               <div className="p-4 rounded-2xl bg-[#141721] border border-white/10 text-left space-y-2 text-xs">
                 <div className="flex justify-between border-b border-white/5 pb-2">
                   <span className="text-slate-400">Appointment Reference:</span>
-                  <span className="font-mono font-bold text-[#E4D5BE]">{completedBooking.id}</span>
+                  <span className="font-mono font-bold text-[#E4D5BE]">{completedBooking.bookingCode || completedBooking.id}</span>
                 </div>
                 <div className="flex justify-between border-b border-white/5 pb-2">
                   <span className="text-slate-400">Procedure:</span>
@@ -468,6 +483,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 <div className="flex justify-between border-b border-white/5 pb-2">
                   <span className="text-slate-400">Location:</span>
                   <span className="text-white">{completedBooking.location}</span>
+                </div>
+                <div className="flex justify-between border-b border-white/5 pb-2">
+                  <span className="text-slate-400">Patient:</span>
+                  <span className="text-white">{completedBooking.patientName} ({completedBooking.patientEmail})</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-400">Date & Slot:</span>
